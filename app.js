@@ -11,14 +11,15 @@ var ebriteReq = require('request');
 app.use(bodyParser.json())
 app.set('port', (process.env.PORT || 3000))
 
-
 app.get('/', function (req, res) {
   res.send('Use the /webhook endpoint.')
 })
+
 app.get('/webhook', function (req, res) {
   res.send('You must POST your request')
 })
 
+// Where dialog flow will connect to webhook
 app.post('/webhook', function (request, response) {
 
 	const EVENTBRITE_TOKEN = 'YOUR_UNIQUE_TOKEN';
@@ -49,8 +50,7 @@ app.post('/webhook', function (request, response) {
 			if (requestSource === googleAssistantRequest) {
 				sendResponse("Hey!get events in your area and other locations!"); // Send simple response to user
 			}
-			else
-			{
+			else{
 				sendResponse("Hey!get events in your area and other locations!"); // Send simple response to user
 			}
 		},
@@ -63,18 +63,19 @@ app.post('/webhook', function (request, response) {
 				SEARCH = SEARCH_default;
 
 			let URL = 'https://www.eventbriteapi.com/v3/events/search/?token='+EVENTBRITE_TOKEN+'&q='+SEARCH;
+			
 			ebriteReq.get(URL,function(error, res, body) {
-              if (!error && res.statusCode == 200) {
-                  body = JSON.parse(body);
-                  let webhookReply = {};
-                  webhookReply = parseEvent(body);
-				  response.json(webhookReply);
-              }
-              else{
-				  let webhookReply = "Sorry, the servers seems to be down";
-				  response.json(webhookReply);
-			  }
-             });
+				if (!error && res.statusCode == 200) {
+					body = JSON.parse(body);
+					let webhookReply = {};
+					webhookReply = parseEvent(body);
+					response.json(webhookReply);
+				 }
+				 else{
+					let webhookReply = "Sorry, the servers seems to be down";
+					response.json(webhookReply);
+				}
+		        });
 		},
 		'input.unknown': () => {
 			if (requestSource === googleAssistantRequest) {
@@ -102,7 +103,6 @@ app.post('/webhook', function (request, response) {
 
 	eventApp.handleRequest(actionHandlers[action]);
 
-
 	// Function to parse and return a facebook formatted response for cards which display individual event info.
 	function parseEvent(eventData,urlType){
 
@@ -110,7 +110,7 @@ app.post('/webhook', function (request, response) {
 		const length = events.length;
 		let responseObject = {};
 		
-	    responseObject.data ={ 	'facebook': {
+		responseObject.data ={'facebook': {
 			'attachment': {
 			  'type': 'template',
 			  'payload': {
@@ -129,7 +129,6 @@ app.post('/webhook', function (request, response) {
 		}
 		return  responseObject;
 	}
-	
 	
 	// Function to generate and return a facebook formatted "element" object. In this case a card element is generated.
 	function getFbElem(event){
@@ -167,7 +166,7 @@ app.post('/webhook', function (request, response) {
 	
 	// Function to send correctly formatted responses to Dialogflow which are then sent to the user
 	function sendResponse (responseToUser) {
-    // if the response is a string send it as a response to the user
+     		 // if the response is a string send it as a response to the user
 		if (typeof responseToUser === 'string') {
 		  let responseJson = {};
 		  responseJson.speech = responseToUser; // spoken response
@@ -196,7 +195,6 @@ app.post('/webhook', function (request, response) {
 
 
 // Response formats for reference
-
 const richResponses = {
 	  'google': {
 		'expectUserResponse': true,
