@@ -104,7 +104,7 @@ app.post('/webhook', function (request, response) {
 	eventApp.handleRequest(actionHandlers[action]);
 
 	// Function to parse and return a facebook formatted response for cards which display individual event info.
-	function parseEvent(eventData,urlType){
+	function parseEvent(eventData){
 
 		const events = eventData.events;
 		const length = events.length;
