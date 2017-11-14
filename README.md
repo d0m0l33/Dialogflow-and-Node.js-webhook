@@ -12,10 +12,10 @@ Log in to console https://dialogflow.com/
 </ul>
 note : you can change these to correspond to the action names of your choice in the app.js file.
 
-<h2>Setting up local server</h2> :
+<h2>Setting up local server</h2> 
 In root directory, run npm install.
-Download and run the ngrok tool for local development, as you need a public url for dialogflow to connect to webhook.https://ngrok.com/
+Download and run the ngrok tool for local development, as you need a public url for dialogflow to connect to webhook https://ngrok.com/
 
-<h2>Running</h2> :
+<h2>Running</h2> 
 node app.js
 
